@@ -6,6 +6,9 @@
          :aria-expanded="visible.toString()"
          :data-modal="name"
          @mousedown.stop="onBackgroundClick">
+      <div>
+
+      </div>
       <div class="v--modal-top-right">
         <slot name="top-right"/>
       </div>
@@ -56,6 +59,10 @@
         default: false
       },
       reset: {
+        type: Boolean,
+        default: false
+      },
+      autoPositioning: {
         type: Boolean,
         default: false
       },
@@ -142,6 +149,11 @@
           top: 0
         },
 
+        afterEvent: {
+          name: '',
+          data: {}
+        },
+
         modal: {
           width: 0,
           widthType: 'px',
@@ -164,6 +176,7 @@
           setTimeout(() => {
             this.visibility.modal = true
             this.$nextTick(() => {
+                this.$emit( this.afterEvent.name, this.afterEvent.data);
               this.addDraggableListeners()
             })
           }, this.delay)
@@ -173,6 +186,7 @@
           setTimeout(() => {
             this.visibility.overlay = false
             this.$nextTick(() => {
+                this.$emit( this.afterEvent.name, this.afterEvent.data);
               this.removeDraggableListeners()
             })
           }, this.delay)
@@ -192,9 +206,10 @@
           this.toggle(state, params)
         }
       });
-
-      window.addEventListener('resize', this.onWindowResize)
-      this.onWindowResize()
+      if (this.autoPositioning) {
+          window.addEventListener('resize', this.onWindowResize)
+          this.onWindowResize()
+      }
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.onWindowResize)
@@ -275,7 +290,9 @@
           name: this.name,
           timestamp: Date.now(),
           canceled: false,
-          ref: this.$refs.modal,
+          ref: () => {
+              return this.$refs.modal;
+          },
           stop: function() {
             this.canceled = true
           }
@@ -325,9 +342,11 @@
 
         if (!stopEventExecution) {
           const afterEvent = this.genEventObject({ state, params })
+          this.afterEvent.name = afterEventName;
+          this.afterEvent.data = afterEvent;
 
           this.visible = state
-          this.$emit(afterEventName, afterEvent)
+
         }
       },
 

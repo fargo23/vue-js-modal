@@ -1,12 +1,12 @@
 {
-  "name": "vue-js-modal",
+  "name": "vue-js-modal-fork",
   "description": "Modal Component for Vue.js",
   "version": "1.2.5",
   "author": "euvl <yev.vlasenko@gmail.com>",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/euvl/vue-js-modal.git"
+    "url": "https://github.com/fargo23/vue-js-modal.git"
   },
   "keywords": [
     "vue",
@@ -14,9 +14,6 @@
     "modal",
     "vue-js-modal"
   ],
-  "bugs": {
-    "url": "https://github.com/euvl/vue-js-modal/issues"
-  },
   "scripts": {
     "build:client": "webpack --config ./build/webpack.client.config.js --progress --hide-modules",
     "build:server": "webpack --config ./build/webpack.server.config.js --progress --hide-modules"
